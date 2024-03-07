@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/services/api-Publist_service.dart';
+import 'package:flutter_application_1/pages/air_condition_page.dart';
+import 'package:flutter_application_1/pages/camera_page.dart';
+import 'package:flutter_application_1/pages/fan_page.dart';
+import 'light_page.dart';
 
 class HomePage extends StatefulWidget {
   final Map<String, dynamic> data;
@@ -11,117 +14,63 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late List<Map<String, dynamic>> lightClients;
-  late List<bool> switchStates;
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeSwitchStates();
-  }
-
-  void _initializeSwitchStates() {
-    lightClients = widget.data["userData"]["client"]
-        .where((client) => client["typeClient"] == "Light")
-        .cast<Map<String, dynamic>>()
-        .toList();
-    switchStates = List.generate(lightClients.length, (index) => false);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Home Page'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'User ID: ${widget.data["userData"]["userId"]}',
-                style: TextStyle(fontSize: 18),
-              ),
-              Text(
-                'Username: ${widget.data["userData"]["username"]}',
-                style: TextStyle(fontSize: 18),
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Client Information:',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: List.generate(lightClients.length, (index) {
-                  final client = lightClients[index];
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Client ${index + 1}:',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'Type: ${client["typeClient"]}',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      Text(
-                        'ID: ${client["client"]}',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      SizedBox(height: 10),
-                      Switch(
-                        value: switchStates[index],
-                        onChanged: (newValue) {
-                          setState(() {
-                            switchStates[index] = newValue;
-                          });
-                          String switchData = newValue ? 'on' : 'off';
-                          _sendDataToServer(switchData, client["client"]);
-                        },
-                      ),
-                      SizedBox(height: 10),
-                    ],
-                  );
-                }),
-              ),
-            ],
-          ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LightPage(data: widget.data),
+                  ),
+                );
+              },
+              child: Text('Light Page'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FanPage(data: widget.data),
+                  ),
+                );
+              },
+              child: Text('Fan Page'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AirConditionPage(data: widget.data),
+                  ),
+                );
+              },
+              child: Text('Air Condition Page'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CameraPage(data: widget.data)),
+                );
+              },
+              child: Text('Camera Page'),
+            ),
+          ],
         ),
       ),
     );
-  }
-
-  Future<void> _sendDataToServer(String switchData, String client) async {
-    try {
-      final response = await apiPublist_service.sendDataToServer(
-        switchData: switchData,
-        token: widget.data["token"],
-        clientIndex: client,
-      );
-      if (response.statusCode == 500) {
-        print('Data sent successfully!');
-        _updateSwitchState(client);
-      } else {
-        print('Failed to send data. Status code: ${response.statusCode}');
-      }
-    } catch (error) {
-      print('Error: $error');
-    }
-  }
-
-  void _updateSwitchState(String clientId) {
-    final index =
-        lightClients.indexWhere((client) => client["client"] == clientId);
-    if (index != -1) {
-      setState(() {
-        switchStates[index] = !switchStates[index];
-      });
-    }
   }
 }

@@ -1,9 +1,8 @@
 // ignore_for_file: unused_import
 
 import 'package:flutter/material.dart';
-import 'login_page.dart';
-import 'register_page.dart';
-import 'detail_page.dart';
+import 'package:flutter_application_1/pages/login_page.dart';
+import 'pages/detail_page.dart';
 
 void main() {
   runApp(MyApp());
