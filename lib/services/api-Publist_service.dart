@@ -6,7 +6,7 @@ class apiPublist_service {
       required String token,
       required String clientIndex}) async {
     final String url =
-        'http://localhost:3000/client/publish'; // แทนที่ด้วย URL ของเซิร์ฟเวอร์ของคุณ
+        'https://node-emqx.burhan.cloud/client/publish'; // แทนที่ด้วย URL ของเซิร์ฟเวอร์ของคุณ
 
     try {
       final response = await http.post(

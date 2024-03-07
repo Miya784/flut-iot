@@ -62,7 +62,8 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CameraPage()),
+                  MaterialPageRoute(
+                      builder: (context) => CameraPage(data: widget.data)),
                 );
               },
               child: Text('Camera Page'),
