@@ -4,10 +4,14 @@ PODS:
     - Flutter
     - MobileVLCKit (~> 3.6.0b9)
   - MobileVLCKit (3.6.0b10)
+  - shared_preferences_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_vlc_player (from `.symlinks/plugins/flutter_vlc_player/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
 
 SPEC REPOS:
   trunk:
@@ -18,11 +22,14 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_vlc_player:
     :path: ".symlinks/plugins/flutter_vlc_player/ios"
+  shared_preferences_foundation:
+    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_vlc_player: 2e318881576450ff081eb023d47c289f2c6681eb
   MobileVLCKit: 5600003cf2dc47acf7ad2fd87fe9f3739b2475ed
+  shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
 
 PODFILE CHECKSUM: 70d9d25280d0dd177a5f637cdb0f0b0b12c6a189
 
