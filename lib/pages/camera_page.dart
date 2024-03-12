@@ -23,7 +23,7 @@ class _CameraPageState extends State<CameraPage> {
 
   void _setupVlcControllers() {
     cameraClients = widget.data['userData']['client']
-        .where((client) => client['typeClient'] == 'Camera')
+        .where((client) => client['typeClient'] == 'camera')
         .toList();
 
     _vlcViewControllers = cameraClients.map((client) {

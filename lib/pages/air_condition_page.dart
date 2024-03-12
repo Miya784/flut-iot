@@ -11,19 +11,20 @@ class AirConditionPage extends StatefulWidget {
 }
 
 class _AirConditionPageState extends State<AirConditionPage> {
-  // bool _switchValue = false;
-  double _sliderValue = 22;
-  bool _isCoolMode = true;
-  bool _isSwingLeft = true;
-  bool _isSwingUp = true;
   late List<Map<String, dynamic>> airConditionClients;
   late List<bool> switchStates;
-  late List<int> sliderValues;
+  late List<double> sliderValues; // Changed to double
+  late List<bool> isCoolModes;
+  late List<bool> isSwingLefts;
+  late List<bool> isSwingUps;
 
   @override
   void initState() {
     super.initState();
     _initializeSwitchStates();
+    _initializeCoolModes();
+    _initializeSwingLefts();
+    _initializeSwingUps();
   }
 
   void _initializeSwitchStates() {
@@ -32,8 +33,20 @@ class _AirConditionPageState extends State<AirConditionPage> {
         .cast<Map<String, dynamic>>()
         .toList();
     switchStates = List.generate(airConditionClients.length, (index) => false);
-    sliderValues = List.generate(
-        airConditionClients.length, (index) => 22); // Default slider value
+    sliderValues = List.generate(airConditionClients.length,
+        (index) => 22.0); // Default slider value as double
+  }
+
+  void _initializeCoolModes() {
+    isCoolModes = List.generate(airConditionClients.length, (index) => true);
+  }
+
+  void _initializeSwingLefts() {
+    isSwingLefts = List.generate(airConditionClients.length, (index) => true);
+  }
+
+  void _initializeSwingUps() {
+    isSwingUps = List.generate(airConditionClients.length, (index) => true);
   }
 
   @override
@@ -79,119 +92,113 @@ class _AirConditionPageState extends State<AirConditionPage> {
                         style: TextStyle(fontSize: 16),
                       ),
                       SizedBox(height: 10),
-                      Switch(
-                        value: switchStates[index],
-                        onChanged: (value) {
+                      ElevatedButton(
+                        onPressed: () {
                           setState(() {
-                            switchStates[index] = value;
-                            _sendDataToServer(
-                              value,
-                              client["client"],
-                              value ? "ON" : "OFF",
-                              _sliderValue,
-                            );
+                            switchStates[index] =
+                                !switchStates[index]; // Toggle switch state
                           });
+                          String switchData = switchStates[index]
+                              ? 'ON'
+                              : 'OFF'; // Determine switch data based on its state
+                          _sendDataToServer(
+                            switchStates[index],
+                            client["client"],
+                            switchData,
+                            sliderValues[
+                                index], // Use slider value of the current client
+                          );
                         },
+                        child: Text(switchStates[index]
+                            ? 'ON'
+                            : 'OFF'), // Display ON/OFF based on switch state
                       ),
                       SizedBox(height: 20),
-                      if (switchStates[
-                          index]) // Show sliders and buttons only if the switch is on
-                        Column(
-                          children: [
-                            // Slider(
-                            //   value: sliderValues[index].toDouble(),
-                            //   min: 22,
-                            //   max: 28,
-                            //   divisions: 6,
-                            //   onChanged: (value) {
-                            //     setState(() {
-                            //       _sliderValue = value;
-                            //       sliderValues[index] = value.toInt();
-                            //       _sendDataToServer(
-                            //         switchStates[index],
-                            //         client["client"],
-                            //         "slider",
-                            //         value,
-                            //       );
-                            //     });
-                            //   },
-                            // ),
-                            SizedBox(height: 10),
-                            // Text('Temperature: $_sliderValue°C'),
-                            ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  _isCoolMode = !_isCoolMode;
-                                  _sliderValue = _isCoolMode ? 22 : 28;
-                                  _sendDataToServer(
-                                    switchStates[index],
-                                    client["client"],
-                                    _isCoolMode ? "cool" : "heat",
-                                    _sliderValue,
-                                  );
-                                });
-                              },
-                              child: SizedBox(
-                                width: 80,
-                                height: 50,
-                                child: Center(
-                                  child: Text(_isCoolMode ? 'cool' : 'heat'),
-                                ),
+                      Column(
+                        children: [
+                          SizedBox(height: 10),
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                isCoolModes[index] = !isCoolModes[index];
+                                sliderValues[index] = isCoolModes[index]
+                                    ? 22.0
+                                    : 28.0; // Assign the slider value of the current client
+                                _sendDataToServer(
+                                  switchStates[index],
+                                  client["client"],
+                                  isCoolModes[index] ? "cool" : "heat",
+                                  sliderValues[
+                                      index], // Use slider value of the current client
+                                );
+                              });
+                            },
+                            child: SizedBox(
+                              width: 80,
+                              height: 50,
+                              child: Center(
+                                child:
+                                    Text(isCoolModes[index] ? 'cool' : 'heat'),
                               ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                ElevatedButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _isSwingLeft = !_isSwingLeft;
-                                      _sendDataToServer(
-                                        switchStates[index],
-                                        client["client"],
-                                        _isSwingLeft
-                                            ? "swingLR"
-                                            : "StopswingLR",
-                                        _sliderValue,
-                                      );
-                                    });
-                                  },
-                                  child: SizedBox(
-                                    width: 110,
-                                    height: 50,
-                                    child: Center(
-                                      child: Text(_isSwingLeft
-                                          ? 'swing LR'
-                                          : 'StopswingLR'),
-                                    ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    isSwingLefts[index] = !isSwingLefts[index];
+                                    _sendDataToServer(
+                                      switchStates[index],
+                                      client["client"],
+                                      isSwingLefts[index]
+                                          ? "swingLR"
+                                          : "StopswingLR",
+                                      sliderValues[
+                                          index], // Use slider value of the current client
+                                    );
+                                  });
+                                },
+                                child: SizedBox(
+                                  width: 110,
+                                  height: 50,
+                                  child: Center(
+                                    child: Text(isSwingLefts[index]
+                                        ? 'swing LR'
+                                        : 'StopswingLR'),
                                   ),
                                 ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _isSwingUp = !_isSwingUp;
-                                      _sendDataToServer(
-                                        switchStates[index],
-                                        client["client"],
-                                        _isSwingUp ? "swingUD" : "stopswingUD",
-                                        _sliderValue,
-                                      );
-                                    });
-                                  },
-                                  child: SizedBox(
-                                    width: 110,
-                                    height: 50,
-                                    child: Center(
-                                      child: Text(_isSwingUp
-                                          ? 'swing UD'
-                                          : 'stopswingUD'),
-                                    ),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    isSwingUps[index] = !isSwingUps[index];
+                                    _sendDataToServer(
+                                      switchStates[index],
+                                      client["client"],
+                                      isSwingUps[index]
+                                          ? "swingUD"
+                                          : "stopswingUD",
+                                      sliderValues[
+                                          index], // Use slider value of the current client
+                                    );
+                                  });
+                                },
+                                child: SizedBox(
+                                  width: 110,
+                                  height: 50,
+                                  child: Center(
+                                    child: Text(isSwingUps[index]
+                                        ? 'swing UD'
+                                        : 'stopswingUD'),
                                   ),
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ],
                   );
                 }),
@@ -231,17 +238,18 @@ class _AirConditionPageState extends State<AirConditionPage> {
             fullCommand = "OFF";
             break;
         }
+        // ignore: unused_local_variable
         final response = await apiPublist_service.sendDataToServer(
           switchData: switchData ? fullCommand : "OFF",
           token: widget.data["token"],
           clientIndex: client,
         );
-        if (response.statusCode == 500) {
-          print('Data sent successfully!');
-          _updateSwitchState(index);
-        } else {
-          print('Failed to send data. Status code: ${response.statusCode}');
-        }
+        // if (response.statusCode == 500) {
+        //   print('Data sent successfully!');
+        //   _updateSwitchState(index);
+        // } else {
+        //   print('Failed to send data. Status code: ${response.statusCode}');
+        // }
       } else {
         print('Failed to find client with ID: $client');
       }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http; // Import the http package
+import 'package:flutter_application_1/services/api-Publist_service.dart';
 
 class GatePage extends StatefulWidget {
   final Map<String, dynamic> data;
@@ -11,51 +11,21 @@ class GatePage extends StatefulWidget {
 }
 
 class _GatePageState extends State<GatePage> {
-  bool _isLoading = false;
+  late List<Map<String, dynamic>> GateClients;
+  late List<bool> switchStates;
 
-  Future<void> _sendGateAction(String action) async {
-    // Show loading indicator
-    setState(() {
-      _isLoading = true;
-    });
+  @override
+  void initState() {
+    super.initState();
+    _initializeSwitchStates();
+  }
 
-    // Define your API URL
-    String apiUrl = 'https://your-api-url.com/gate';
-
-    // Define your JSON body
-    Map<String, dynamic> requestBody = {
-      'action': action,
-      // You can add any additional parameters needed by your API
-    };
-
-    try {
-      // Send the HTTP POST request
-      http.Response response = await http.post(
-        Uri.parse(apiUrl),
-        body: requestBody,
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          // Add any additional headers needed by your API
-        },
-      );
-
-      // Check the response status
-      if (response.statusCode == 200) {
-        // Request successful
-        print('Gate $action successful');
-      } else {
-        // Request failed
-        print('Failed to $action gate: ${response.statusCode}');
-      }
-    } catch (e) {
-      // Error occurred while sending request
-      print('Error sending $action request: $e');
-    } finally {
-      // Hide loading indicator
-      setState(() {
-        _isLoading = false;
-      });
-    }
+  void _initializeSwitchStates() {
+    GateClients = widget.data["userData"]["client"]
+        .where((client) => client["typeClient"] == "Gate")
+        .cast<Map<String, dynamic>>()
+        .toList();
+    switchStates = List.generate(GateClients.length, (index) => false);
   }
 
   @override
@@ -64,30 +34,95 @@ class _GatePageState extends State<GatePage> {
       appBar: AppBar(
         title: Text('Gate Page'),
       ),
-      body: _isLoading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      _sendGateAction('open'); // Send open gate request
-                    },
-                    child: Text('Open Gate'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      _sendGateAction('close'); // Send close gate request
-                    },
-                    child: Text('Close Gate'),
-                  ),
-                ],
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'User ID: ${widget.data["userData"]["userId"]}',
+                style: TextStyle(fontSize: 18),
               ),
-            ),
+              Text(
+                'Username: ${widget.data["userData"]["username"]}',
+                style: TextStyle(fontSize: 18),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Gate Clients:',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: List.generate(GateClients.length, (index) {
+                  final client = GateClients[index];
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Client ${index + 1}:',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        'ID: ${client["client"]}',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            switchStates[index] =
+                                !switchStates[index]; // Toggle switch state
+                          });
+                          String switchData = switchStates[index]
+                              ? 'on'
+                              : 'off'; // Determine switch data based on its state
+                          _sendDataToServer(switchData, client["client"]);
+                        },
+                        child: Text(switchStates[index]
+                            ? 'ON'
+                            : 'OFF'), // Display ON/OFF based on switch state
+                      ),
+                      SizedBox(height: 10),
+                    ],
+                  );
+                }),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
+  }
+
+  Future<void> _sendDataToServer(String switchData, String client) async {
+    try {
+      final response = await apiPublist_service.sendDataToServer(
+        switchData: switchData,
+        token: widget.data["token"],
+        clientIndex: client,
+      );
+      // if (response.statusCode == 500) {
+      //   print('Data sent successfully!');
+      //   _updateSwitchState(client);
+      // } else {
+      //   print('Failed to send data. Status code: ${response.statusCode}');
+      // }
+    } catch (error) {
+      print('Error: $error');
+    }
+  }
+
+  void _updateSwitchState(String clientId) {
+    final index =
+        GateClients.indexWhere((client) => client["client"] == clientId);
+    if (index != -1) {
+      setState(() {
+        switchStates[index] = !switchStates[index];
+      });
+    }
   }
 }

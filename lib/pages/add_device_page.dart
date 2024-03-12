@@ -78,7 +78,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
                   selectedDeviceType = newValue;
                 });
               },
-              items: <String>['Light', 'Fan', 'Aircondition', 'camera']
+              items: <String>['Light', 'Fan', 'Aircondition', 'camera', 'Gate']
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
