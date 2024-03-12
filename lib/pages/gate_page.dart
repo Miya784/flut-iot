@@ -100,6 +100,7 @@ class _GatePageState extends State<GatePage> {
 
   Future<void> _sendDataToServer(String switchData, String client) async {
     try {
+      // ignore: unused_local_variable
       final response = await apiPublist_service.sendDataToServer(
         switchData: switchData,
         token: widget.data["token"],
