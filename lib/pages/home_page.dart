@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'light_page.dart';
-import 'fan_page.dart';
-import 'air_condition_page.dart';
-import 'camera_page.dart';
-import 'add_device_page.dart';
-import 'gate_page.dart'; // Import the GatePage
+import 'pages/light_page.dart';
+import 'pages/fan_page.dart';
+import 'pages/air_condition_page.dart';
+import 'pages/camera_page.dart';
+import 'pages/add_device_page.dart';
+import 'pages/gate_page.dart'; // Import the GatePage
 
 class HomePage extends StatefulWidget {
   final Map<String, dynamic> data;
@@ -55,8 +55,8 @@ class _HomePageState extends State<HomePage> {
                 _loading = true;
               });
 
-              // Delay for 500ms
-              await Future.delayed(Duration(milliseconds: 500));
+              // Delay for 3 seconds (simulating a connection check)
+              await Future.delayed(Duration(seconds: 3));
 
               // Navigate to the next page
               Navigator.push(
@@ -81,8 +81,8 @@ class _HomePageState extends State<HomePage> {
                 _loading = true;
               });
 
-              // Delay for 500ms
-              await Future.delayed(Duration(milliseconds: 500));
+              // Delay for 3 seconds (simulating a connection check)
+              await Future.delayed(Duration(seconds: 3));
 
               // Navigate to the next page
               Navigator.push(
@@ -107,8 +107,8 @@ class _HomePageState extends State<HomePage> {
                 _loading = true;
               });
 
-              // Delay for 500ms
-              await Future.delayed(Duration(milliseconds: 500));
+              // Delay for 3 seconds (simulating a connection check)
+              await Future.delayed(Duration(seconds: 3));
 
               // Navigate to the next page
               Navigator.push(
@@ -133,8 +133,8 @@ class _HomePageState extends State<HomePage> {
                 _loading = true;
               });
 
-              // Delay for 500ms
-              await Future.delayed(Duration(milliseconds: 500));
+              // Delay for 3 seconds (simulating a connection check)
+              await Future.delayed(Duration(seconds: 3));
 
               // Navigate to the next page
               Navigator.push(
@@ -159,8 +159,8 @@ class _HomePageState extends State<HomePage> {
                 _loading = true;
               });
 
-              // Delay for 500ms
-              await Future.delayed(Duration(milliseconds: 500));
+              // Delay for 3 seconds (simulating a connection check)
+              await Future.delayed(Duration(seconds: 3));
 
               // Navigate to the next page
               Navigator.push(
@@ -185,8 +185,8 @@ class _HomePageState extends State<HomePage> {
                 _loading = true;
               });
 
-              // Delay for 500ms
-              await Future.delayed(Duration(milliseconds: 500));
+              // Delay for 3 seconds (simulating a connection check)
+              await Future.delayed(Duration(seconds: 3));
 
               // Navigate to the next page
               Navigator.push(
