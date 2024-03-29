@@ -54,13 +54,14 @@ class _LoginPageState extends State<LoginPage> {
           barrierDismissible: false,
           builder: (BuildContext context) {
             return Center(
-              child: CircularProgressIndicator(),
+              child: RefreshProgressIndicator(
+                color: Colors.orange[700],
+              ),
             );
           },
         );
 
-        // Delay navigation by 500 milliseconds
-        await Future.delayed(Duration(milliseconds: 500));
+        await Future.delayed(Duration(milliseconds: 1000));
 
         // Dismiss loading dialog
         Navigator.of(context).pop();
@@ -79,7 +80,10 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('OK'),
+                  child: Text(
+                    'OK',
+                    style: TextStyle(color: Colors.orange),
+                  ),
                 ),
               ],
             );
@@ -108,88 +112,91 @@ class _LoginPageState extends State<LoginPage> {
         padding: EdgeInsets.symmetric(horizontal: 50),
         child: Form(
           key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Container(
-                  child: Icon(
-                Icons.login_outlined,
-                size: 200,
-                color: Colors.orange[700],
-              )),
-              SizedBox(height: 25),
-              Container(
-                child: Text(
-                  "Please Sign In",
-                  style: TextStyle(color: Colors.orange[800], fontSize: 20),
-                ),
-              ),
-              SizedBox(height: 25),
-              TextFormField(
-                controller: _usernameController,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.orange[50],
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width: 3, color: Colors.orange)),
-                  hintText: 'Username',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 12),
-              TextFormField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.orange[50],
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width: 3, color: Colors.orange)),
-                  hintText: 'Password',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 20),
-              Row(
-                children: <Widget>[
-                  Checkbox(
-                    value: _rememberUsername,
-                    onChanged: (value) {
-                      setState(() {
-                        _rememberUsername = value!;
-                      });
-                    },
-                    activeColor: Colors.orange,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                SizedBox(height: 150),
+                Container(
+                    child: Icon(
+                  Icons.login_outlined,
+                  size: 150,
+                  color: Colors.orange[700],
+                )),
+                SizedBox(height: 25),
+                Container(
+                  child: Text(
+                    "Please Sign In",
+                    style: TextStyle(color: Colors.orange[800], fontSize: 20),
                   ),
-                  Text('Remember Username'),
-                ],
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.orange[700]),
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _login(context);
-                  }
-                },
-                child: Text('Login'),
-              ),
-              SizedBox(height: 20),
-              TextButton(
-                style:
-                    TextButton.styleFrom(foregroundColor: Colors.orange[700]),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => RegisterPage()),
-                  );
-                },
-                child: Text('Don\'t have an account? Register'),
-              ),
-            ],
+                ),
+                SizedBox(height: 25),
+                TextFormField(
+                  controller: _usernameController,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.orange[50],
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 3, color: Colors.orange)),
+                    hintText: 'Username',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 12),
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.orange[50],
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 3, color: Colors.orange)),
+                    hintText: 'Password',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Row(
+                  children: <Widget>[
+                    Checkbox(
+                      value: _rememberUsername,
+                      onChanged: (value) {
+                        setState(() {
+                          _rememberUsername = value!;
+                        });
+                      },
+                      activeColor: Colors.orange,
+                    ),
+                    Text('Remember Username'),
+                  ],
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.orange[700]),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _login(context);
+                    }
+                  },
+                  child: Text('Login'),
+                ),
+                SizedBox(height: 20),
+                TextButton(
+                  style:
+                      TextButton.styleFrom(foregroundColor: Colors.orange[700]),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => RegisterPage()),
+                    );
+                  },
+                  child: Text('Don\'t have an account? Register'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
