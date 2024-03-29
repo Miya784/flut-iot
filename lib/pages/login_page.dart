@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/services/api_service.dart';
 import 'home_page.dart';
-import 'register_page.dart';
+import 'pages/register_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
@@ -103,22 +103,37 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-        centerTitle: true,
-      ),
+      backgroundColor: Colors.orange[100],
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.symmetric(horizontal: 50),
         child: Form(
           key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              Container(
+                  child: Icon(
+                Icons.login_outlined,
+                size: 200,
+                color: Colors.orange[700],
+              )),
+              SizedBox(height: 25),
+              Container(
+                child: Text(
+                  "Please Sign In",
+                  style: TextStyle(color: Colors.orange[800], fontSize: 20),
+                ),
+              ),
+              SizedBox(height: 25),
               TextFormField(
                 controller: _usernameController,
                 decoration: InputDecoration(
-                  labelText: 'Username',
+                  filled: true,
+                  fillColor: Colors.orange[50],
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(width: 3, color: Colors.orange)),
+                  hintText: 'Username',
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -127,7 +142,11 @@ class _LoginPageState extends State<LoginPage> {
                 controller: _passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
-                  labelText: 'Password',
+                  filled: true,
+                  fillColor: Colors.orange[50],
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(width: 3, color: Colors.orange)),
+                  hintText: 'Password',
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -141,12 +160,16 @@ class _LoginPageState extends State<LoginPage> {
                         _rememberUsername = value!;
                       });
                     },
+                    activeColor: Colors.orange,
                   ),
                   Text('Remember Username'),
                 ],
               ),
               SizedBox(height: 20),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.orange[700]),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _login(context);
@@ -156,6 +179,8 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SizedBox(height: 20),
               TextButton(
+                style:
+                    TextButton.styleFrom(foregroundColor: Colors.orange[700]),
                 onPressed: () {
                   Navigator.push(
                     context,
