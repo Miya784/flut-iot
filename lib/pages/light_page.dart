@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/services/api-Publist_service.dart';
 
@@ -31,8 +32,10 @@ class _LightPageState extends State<LightPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.orange[100],
       appBar: AppBar(
-        title: Text('Light Page'),
+        backgroundColor: Colors.orange[100],
+        title: Text(''),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -40,49 +43,54 @@ class _LightPageState extends State<LightPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'User ID: ${widget.data["userData"]["userId"]}',
-                style: TextStyle(fontSize: 18),
-              ),
-              Text(
-                'Username: ${widget.data["userData"]["username"]}',
-                style: TextStyle(fontSize: 18),
+              Center(
+                child: Text(
+                  "${widget.data["userData"]["username"]} 's Light",
+                  style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.orange[900],
+                      fontWeight: FontWeight.bold),
+                ),
               ),
               SizedBox(height: 20),
-              Text(
-                'Light Clients:',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: List.generate(lightClients.length, (index) {
                   final client = lightClients[index];
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Client ${index + 1}:',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'ID: ${client["client"]}',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      SizedBox(height: 10),
-                      Switch(
-                        value: switchStates[index],
-                        onChanged: (newValue) {
-                          setState(() {
-                            switchStates[index] = newValue;
-                          });
-                          String switchData = newValue ? 'on' : 'off';
-                          _sendDataToServer(switchData, client["client"]);
-                        },
-                      ),
-                      SizedBox(height: 10),
-                    ],
+                  return Container(
+                    margin: EdgeInsets.symmetric(vertical: 20),
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.orange[700],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          'Name : ${client["client"]}',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                        SizedBox(height: 10),
+                        CupertinoSwitch(
+                          trackColor: Colors.orange[100],
+                          activeColor: Colors.orange,
+                          thumbColor: Colors.white,
+                          value: switchStates[index],
+                          onChanged: (newValue) {
+                            setState(() {
+                              switchStates[index] = newValue;
+                            });
+                            String switchData = newValue ? 'on' : 'off';
+                            _sendDataToServer(switchData, client["client"]);
+                          },
+                        ),
+                      ],
+                    ),
                   );
                 }),
               ),
