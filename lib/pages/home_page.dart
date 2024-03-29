@@ -23,188 +23,206 @@ class _HomePageState extends State<HomePage> {
     final String username = widget.data["userData"]['username'];
 
     return Scaffold(
-      appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+      backgroundColor: Colors.orange[100],
+      body: SafeArea(
+        child: Column(
           children: [
-            Text(
-              'Welcome',
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              username,
-              style: TextStyle(
-                fontSize: 16.0,
-                color: Theme.of(context).textTheme.bodyText1!.color,
-              ),
-            ),
+            Container(
+                child: Row(
+                  children: [
+                    Padding(padding: EdgeInsets.all(10)),
+                    Text(
+                      "Welcome," + " \n" + username,
+                      style: TextStyle(color: Colors.white, fontSize: 30),
+                    )
+                  ],
+                ),
+                decoration: BoxDecoration(
+                    color: Colors.orange[700],
+                    borderRadius:
+                        BorderRadius.only(bottomRight: Radius.circular(60))),
+                height: 150),
+            Expanded(
+                child: GridView.count(
+              crossAxisCount: 2,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              padding: EdgeInsets.all(50),
+              children: [
+                buildSquareButton(
+                    onPressed: () async {
+                      // Show loading state
+                      setState(() {
+                        _loading = true;
+                      });
+
+                      // Delay for 3 seconds (simulating a connection check)
+                      await Future.delayed(Duration(seconds: 3));
+
+                      // Navigate to the next page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LightPage(data: widget.data),
+                        ),
+                      );
+
+                      // Hide loading state
+                      setState(() {
+                        _loading = false;
+                      });
+                    },
+                    label: "Light",
+                    icon: Icon(
+                      Icons.lightbulb_outline,
+                      size: 100,
+                    )),
+                buildSquareButton(
+                    onPressed: () async {
+                      // Show loading state
+                      setState(() {
+                        _loading = true;
+                      });
+
+                      // Delay for 3 seconds (simulating a connection check)
+                      await Future.delayed(Duration(seconds: 3));
+
+                      // Navigate to the next page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FanPage(data: widget.data),
+                        ),
+                      );
+
+                      // Hide loading state
+                      setState(() {
+                        _loading = false;
+                      });
+                    },
+                    label: "Fan",
+                    icon: Icon(
+                      Icons.air_outlined,
+                      size: 100,
+                    )),
+                buildSquareButton(
+                    onPressed: () async {
+                      // Show loading state
+                      setState(() {
+                        _loading = true;
+                      });
+
+                      // Delay for 3 seconds (simulating a connection check)
+                      await Future.delayed(Duration(seconds: 3));
+
+                      // Navigate to the next page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AirConditionPage(data: widget.data),
+                        ),
+                      );
+
+                      // Hide loading state
+                      setState(() {
+                        _loading = false;
+                      });
+                    },
+                    label: "Aircondition",
+                    icon: Icon(
+                      Icons.ac_unit_outlined,
+                      size: 100,
+                    )),
+                buildSquareButton(
+                    onPressed: () async {
+                      // Show loading state
+                      setState(() {
+                        _loading = true;
+                      });
+
+                      // Delay for 3 seconds (simulating a connection check)
+                      await Future.delayed(Duration(seconds: 3));
+
+                      // Navigate to the next page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CameraPage(data: widget.data),
+                        ),
+                      );
+
+                      // Hide loading state
+                      setState(() {
+                        _loading = false;
+                      });
+                    },
+                    label: "Camera",
+                    icon: Icon(
+                      Icons.camera_alt_outlined,
+                      size: 100,
+                    )),
+                buildSquareButton(
+                    onPressed: () async {
+                      // Show loading state
+                      setState(() {
+                        _loading = true;
+                      });
+
+                      // Delay for 3 seconds (simulating a connection check)
+                      await Future.delayed(Duration(seconds: 3));
+
+                      // Navigate to the next page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => GatePage(data: widget.data),
+                        ),
+                      );
+
+                      // Hide loading state
+                      setState(() {
+                        _loading = false;
+                      });
+                    },
+                    label: "Gate",
+                    icon: Icon(
+                      Icons.door_sliding_outlined,
+                      size: 100,
+                    )),
+                buildSquareButton(
+                    onPressed: () async {
+                      // Show loading state
+                      setState(() {
+                        _loading = true;
+                      });
+
+                      // Delay for 3 seconds (simulating a connection check)
+                      await Future.delayed(Duration(seconds: 3));
+
+                      // Navigate to the next page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AddDevicePage(data: widget.data),
+                        ),
+                      );
+
+                      // Hide loading state
+                      setState(() {
+                        _loading = false;
+                      });
+                    },
+                    label: "Add device",
+                    icon: Icon(
+                      Icons.add_box_outlined,
+                      size: 100,
+                    )),
+              ],
+            ))
           ],
         ),
-        centerTitle: true, // Center the title
-      ),
-      body: GridView.count(
-        crossAxisCount: 2, // 2 columns
-        mainAxisSpacing: 10.0, // Vertical spacing between items
-        crossAxisSpacing: 10.0, // Horizontal spacing between items
-        padding: EdgeInsets.all(10.0),
-        children: [
-          buildSquareButton(
-            onPressed: () async {
-              // Show loading state
-              setState(() {
-                _loading = true;
-              });
-
-              // Delay for 3 seconds (simulating a connection check)
-              await Future.delayed(Duration(seconds: 3));
-
-              // Navigate to the next page
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LightPage(data: widget.data),
-                ),
-              );
-
-              // Hide loading state
-              setState(() {
-                _loading = false;
-              });
-            },
-            label: 'Light Page',
-            description: 'Control lights',
-          ),
-          buildSquareButton(
-            onPressed: () async {
-              // Show loading state
-              setState(() {
-                _loading = true;
-              });
-
-              // Delay for 3 seconds (simulating a connection check)
-              await Future.delayed(Duration(seconds: 3));
-
-              // Navigate to the next page
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => FanPage(data: widget.data),
-                ),
-              );
-
-              // Hide loading state
-              setState(() {
-                _loading = false;
-              });
-            },
-            label: 'Fan Page',
-            description: 'Adjust fan settings',
-          ),
-          buildSquareButton(
-            onPressed: () async {
-              // Show loading state
-              setState(() {
-                _loading = true;
-              });
-
-              // Delay for 3 seconds (simulating a connection check)
-              await Future.delayed(Duration(seconds: 3));
-
-              // Navigate to the next page
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AirConditionPage(data: widget.data),
-                ),
-              );
-
-              // Hide loading state
-              setState(() {
-                _loading = false;
-              });
-            },
-            label: 'Air Condition Page',
-            description: 'Set air conditioning',
-          ),
-          buildSquareButton(
-            onPressed: () async {
-              // Show loading state
-              setState(() {
-                _loading = true;
-              });
-
-              // Delay for 3 seconds (simulating a connection check)
-              await Future.delayed(Duration(seconds: 3));
-
-              // Navigate to the next page
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CameraPage(data: widget.data),
-                ),
-              );
-
-              // Hide loading state
-              setState(() {
-                _loading = false;
-              });
-            },
-            label: 'Camera Page',
-            description: 'View cameras',
-          ),
-          buildSquareButton(
-            onPressed: () async {
-              // Show loading state
-              setState(() {
-                _loading = true;
-              });
-
-              // Delay for 3 seconds (simulating a connection check)
-              await Future.delayed(Duration(seconds: 3));
-
-              // Navigate to the next page
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddDevicePage(data: widget.data),
-                ),
-              );
-
-              // Hide loading state
-              setState(() {
-                _loading = false;
-              });
-            },
-            label: 'Add Device Page',
-            description: 'Add new devices',
-          ),
-          buildSquareButton(
-            onPressed: () async {
-              // Show loading state
-              setState(() {
-                _loading = true;
-              });
-
-              // Delay for 3 seconds (simulating a connection check)
-              await Future.delayed(Duration(seconds: 3));
-
-              // Navigate to the next page
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => GatePage(data: widget.data),
-                ),
-              );
-
-              // Hide loading state
-              setState(() {
-                _loading = false;
-              });
-            },
-            label: 'Gate Page',
-            description: 'Control gate',
-          ),
-        ],
       ),
     );
   }
@@ -212,28 +230,25 @@ class _HomePageState extends State<HomePage> {
   Widget buildSquareButton({
     required VoidCallback onPressed,
     required String label,
-    required String description,
+    required Icon icon,
   }) {
     return ElevatedButton(
-      onPressed: _loading ? null : onPressed, // Disable button when loading
+      onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        padding: EdgeInsets.all(16.0),
+        backgroundColor: Colors.orange[50],
+        foregroundColor: Colors.orange[700],
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0), // Make button square
+          borderRadius: BorderRadius.circular(30),
+          // Make button square
         ),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          icon,
           Text(
             label,
-            style: TextStyle(fontSize: 16.0),
-          ),
-          SizedBox(height: 4.0),
-          Text(
-            description,
-            style: TextStyle(fontSize: 12.0, color: Colors.white),
-            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 20.0),
           ),
         ],
       ),
