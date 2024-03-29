@@ -16,7 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool _loading = false; // Add loading state
+  bool _loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -233,7 +233,7 @@ class _HomePageState extends State<HomePage> {
     required Icon icon,
   }) {
     return ElevatedButton(
-      onPressed: onPressed,
+      onPressed: _loading ? null : onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.orange[50],
         foregroundColor: Colors.orange[700],
