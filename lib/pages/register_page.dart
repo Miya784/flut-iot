@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -71,28 +72,60 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Register'),
-      ),
+      backgroundColor: Colors.orange[100],
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Icon(
+              Icons.add_home,
+              size: 150,
+              color: Colors.orange[700],
+            ),
+            SizedBox(height: 50),
+            Text(
+              'Please Enter a Username and password',
+              style: TextStyle(color: Colors.orange[700], fontSize: 16),
+            ),
+            SizedBox(height: 25),
             TextField(
               controller: _usernameController,
-              decoration: InputDecoration(labelText: 'Username'),
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.orange[50],
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(width: 3, color: Colors.orange)),
+                hintText: 'Username',
+                border: OutlineInputBorder(),
+              ),
             ),
             SizedBox(height: 12),
             TextField(
               controller: _passwordController,
               obscureText: true,
-              decoration: InputDecoration(labelText: 'Password'),
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.orange[50],
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(width: 3, color: Colors.orange)),
+                hintText: 'Password',
+                border: OutlineInputBorder(),
+              ),
             ),
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => _register(context),
-              child: Text('Register'),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.orange[100],
+                        backgroundColor: Colors.orange[700]),
+                    onPressed: () => _register(context),
+                    child: Text('Register'),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
