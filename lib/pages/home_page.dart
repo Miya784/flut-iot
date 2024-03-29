@@ -16,7 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool _loading = false; // Add loading state
+  bool _loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +30,25 @@ class _HomePageState extends State<HomePage> {
             Container(
                 child: Row(
                   children: [
-                    Padding(padding: EdgeInsets.all(10)),
-                    Text(
-                      "Welcome," + " \n" + username,
-                      style: TextStyle(color: Colors.white, fontSize: 30),
+                    Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 10)),
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: 40,
+                        ),
+                        Text(
+                          "Welcome home ,",
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                        Text(username,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 50,
+                                fontWeight: FontWeight.bold,
+                                fontStyle: FontStyle.italic)),
+                      ],
                     )
                   ],
                 ),
@@ -233,7 +248,7 @@ class _HomePageState extends State<HomePage> {
     required Icon icon,
   }) {
     return ElevatedButton(
-      onPressed: onPressed,
+      onPressed: _loading ? null : onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.orange[50],
         foregroundColor: Colors.orange[700],
@@ -248,7 +263,7 @@ class _HomePageState extends State<HomePage> {
           icon,
           Text(
             label,
-            style: TextStyle(fontSize: 20.0),
+            style: TextStyle(fontSize: 15.0),
           ),
         ],
       ),
