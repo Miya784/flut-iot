@@ -14,24 +14,29 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _rememberUsername = false;
+  bool _rememberPassword = false;
 
   @override
   void initState() {
     super.initState();
-    _loadRememberedUsername();
+    _loadRememberedCredentials();
   }
 
-  Future<void> _loadRememberedUsername() async {
+  Future<void> _loadRememberedCredentials() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       _usernameController.text = prefs.getString('remembered_username') ?? '';
+      _passwordController.text = prefs.getString('remembered_password') ?? '';
       _rememberUsername = _usernameController.text.isNotEmpty;
+      _rememberPassword = _passwordController.text.isNotEmpty;
     });
   }
 
-  Future<void> _saveRememberedUsername(String username) async {
+  Future<void> _saveRememberedCredentials(
+      String username, String password) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('remembered_username', username);
+    await prefs.setString('remembered_password', password);
   }
 
   Future<void> _login(BuildContext context) async {
@@ -43,9 +48,9 @@ class _LoginPageState extends State<LoginPage> {
           await ApiService.login(username, password);
 
       if (data.containsKey('token')) {
-        // Save username if remember username is checked
         if (_rememberUsername) {
-          await _saveRememberedUsername(username);
+          await _saveRememberedCredentials(
+              username, _rememberPassword ? password : '');
         }
 
         // Show loading indicator for 300 milliseconds
@@ -107,9 +112,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.orange[100],
+      backgroundColor: Colors.white,
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 50),
+        padding: EdgeInsets.symmetric(horizontal: 30),
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
@@ -121,14 +126,17 @@ class _LoginPageState extends State<LoginPage> {
                 Container(
                     child: Icon(
                   Icons.login_outlined,
-                  size: 150,
+                  size: 160,
                   color: Colors.orange[700],
                 )),
                 SizedBox(height: 25),
                 Container(
                   child: Text(
                     "Please Sign In",
-                    style: TextStyle(color: Colors.orange[800], fontSize: 20),
+                    style: TextStyle(
+                        color: Colors.orange[800],
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
                 SizedBox(height: 25),
@@ -156,7 +164,6 @@ class _LoginPageState extends State<LoginPage> {
                     border: OutlineInputBorder(),
                   ),
                 ),
-                SizedBox(height: 20),
                 Row(
                   children: <Widget>[
                     Checkbox(
@@ -171,11 +178,29 @@ class _LoginPageState extends State<LoginPage> {
                     Text('Remember Username'),
                   ],
                 ),
-                SizedBox(height: 20),
+                Row(
+                  children: <Widget>[
+                    Checkbox(
+                      value: _rememberPassword,
+                      onChanged: (value) {
+                        setState(() {
+                          _rememberPassword = value!;
+                        });
+                      },
+                      activeColor: Colors.orange,
+                    ),
+                    Text('Remember Password'),
+                  ],
+                ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.orange[700]),
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.orange[700],
+                    elevation:
+                        10, // Adjust the value to control the shadow intensity
+                    shadowColor: Colors
+                        .grey, // You can customize the shadow color if needed
+                  ),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       _login(context);
