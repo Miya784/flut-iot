@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/services/api-Publist_service.dart';
 
@@ -33,86 +34,158 @@ class _FanPageState extends State<FanPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Fan Page'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'User ID: ${widget.data["userData"]["userId"]}',
-                style: TextStyle(fontSize: 18),
+      backgroundColor: Colors.orange[100],
+      body: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.only(top: 40, left: 25, right: 10),
+            decoration: BoxDecoration(
+                color: Colors.orange[700],
+                borderRadius:
+                    BorderRadius.only(bottomLeft: Radius.circular(40)),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey.withOpacity(0.7),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3))
+                ]),
+            child: SizedBox(
+              width: double.infinity,
+              height: 60,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(100),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey.withOpacity(0.7),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: Offset(0, 3))
+                        ]),
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.pop(
+                            context); // This line ensures navigation back to the home page
+                      },
+                      icon: Icon(
+                        Icons.home,
+                        color: Colors.orange[700],
+                      ),
+                    ),
+                  ),
+                  Text(
+                    "${widget.data["userData"]["username"]}'s fan",
+                    style: TextStyle(
+                        fontSize: 28,
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                ],
               ),
-              Text(
-                'Username: ${widget.data["userData"]["username"]}',
-                style: TextStyle(fontSize: 18),
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Fan Clients:',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: List.generate(fanClients.length, (index) {
-                  final client = fanClients[index];
-                  return Column(
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height: 10),
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Client ${index + 1}:',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'ID: ${client["client"]}',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      SizedBox(height: 10),
-                      Switch(
-                        value: switchStates[index],
-                        onChanged: (value) {
-                          setState(() {
-                            switchStates[index] = value;
-                            _sendDataToServer(value, client["client"]);
-                          });
-                        },
-                      ),
-                      SizedBox(height: 1),
-                      switchStates[index]
-                          ? Slider(
-                              value: sliderValues[index].toDouble(),
-                              min: 0,
-                              max: 2,
-                              divisions: 2,
+                    children: List.generate(fanClients.length, (index) {
+                      final client = fanClients[index];
+                      return Container(
+                        margin: EdgeInsets.symmetric(vertical: 20),
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: switchStates[index]
+                                  ? Colors.green.withOpacity(0.7)
+                                  : Colors.grey.withOpacity(0.7),
+                              spreadRadius: 3,
+                              blurRadius: 10,
+                              offset:
+                                  Offset(0, 5), // changes position of shadow
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Name: ${client["client"]}',
+                              style: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.orange[700]),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            SizedBox(height: 10),
+                            CupertinoSwitch(
+                              activeColor: Colors.green,
+                              trackColor: Colors.redAccent,
+                              value: switchStates[index],
                               onChanged: (value) {
                                 setState(() {
-                                  sliderValues[index] = value.toInt();
-                                  _sendDataToServer(
-                                      switchStates[index], client["client"]);
+                                  switchStates[index] = value;
+                                  _sendDataToServer(value, client["client"]);
                                 });
                               },
-                            )
-                          : Container(),
-                      SizedBox(height: 1),
-                      Text(
-                        switchStates[index]
-                            ? 'Fan Level: ${sliderValues[index] + 1}'
-                            : 'Fan is status Off',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      SizedBox(height: 10),
-                    ],
-                  );
-                }),
+                            ),
+                            SizedBox(height: 1),
+                            switchStates[index]
+                                ? Slider(
+                                    thumbColor: Colors.orange,
+                                    activeColor: Colors.orange[700],
+                                    inactiveColor: Colors.orange[200],
+                                    value: sliderValues[index].toDouble(),
+                                    min: 0,
+                                    max: 2,
+                                    divisions: 2,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        sliderValues[index] = value.toInt();
+                                        _sendDataToServer(switchStates[index],
+                                            client["client"]);
+                                      });
+                                    },
+                                  )
+                                : Container(),
+                            SizedBox(height: 1),
+                            Text(
+                              switchStates[index]
+                                  ? 'Speed : ${sliderValues[index] + 1}'
+                                  : 'Fan is status Off',
+                              style: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.orange[700]),
+                            ),
+                            SizedBox(height: 10),
+                          ],
+                        ),
+                      );
+                    }),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
