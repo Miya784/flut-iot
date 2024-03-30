@@ -1,6 +1,22 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart';
+
+class UpperCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    // Capitalize only the first letter
+    if (newValue.text.isNotEmpty) {
+      return TextEditingValue(
+        text: newValue.text[0].toUpperCase() + newValue.text.substring(1),
+        selection: newValue.selection,
+      );
+    }
+    return newValue;
+  }
+}
 
 class AddDevicePage extends StatefulWidget {
   final Map<String, dynamic> data;
@@ -47,6 +63,13 @@ class _AddDevicePageState extends State<AddDevicePage> {
 
     // Handle response here, you can show a message or navigate back based on response
     if (response.statusCode == 200) {
+      // Show a snackbar notification for success
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+              'Device added successfully! Please click the Refresh button'),
+        ),
+      );
       // Success, do something
       print('Device added successfully!');
     } else {
@@ -55,45 +78,139 @@ class _AddDevicePageState extends State<AddDevicePage> {
     }
   }
 
+  void _restartApp() {
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      '/', // The initial route of your app
+      (route) => false, // Remove all routes except the initial route
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.orange[100],
       appBar: AppBar(
-        title: Text('Add Device'),
+        backgroundColor: Colors.orange[100],
+        title: Text(''),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(20),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextField(
-              controller: deviceNameController,
-              decoration: InputDecoration(labelText: 'Device Name'),
+            SizedBox(height: 20),
+            Center(
+              child: Container(
+                child: Text(
+                  'Add a device',
+                  style: TextStyle(
+                      color: Colors.orange[700],
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic),
+                ),
+              ),
             ),
-            SizedBox(height: 16.0),
-            DropdownButtonFormField<String>(
-              value: selectedDeviceType,
-              onChanged: (String? newValue) {
-                setState(() {
-                  selectedDeviceType = newValue;
-                });
-              },
-              items: <String>['Light', 'Fan', 'Aircondition', 'camera', 'Gate']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              decoration: InputDecoration(
-                labelText: 'Device Type',
-                border: OutlineInputBorder(),
+            SizedBox(height: 20),
+            Container(
+              height: 60,
+              width: 200,
+              padding: EdgeInsets.symmetric(horizontal: 50, vertical: 0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.deepOrangeAccent),
+              ),
+              child: TextField(
+                controller: deviceNameController,
+                decoration: InputDecoration(
+                    border: InputBorder.none, hintText: 'Device name'),
+                cursorColor: Colors.orange,
+                inputFormatters: [
+                  UpperCaseTextFormatter(), // Restrict input to capitalize the first letter
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
+            Container(
+              height: 60,
+              width: 200, // Adjust the width of the dropdown button
+              child: DropdownButtonFormField<String>(
+                value: selectedDeviceType,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedDeviceType = newValue;
+                  });
+                },
+                items: <String>[
+                  'Light',
+                  'Fan',
+                  'Aircondition',
+                  'Camera',
+                  'Gate'
+                ].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(
+                      value,
+                      style: TextStyle(fontSize: 16), // Adjust the font size
+                    ),
+                  );
+                }).toList(),
+                decoration: InputDecoration(
+                  hintText: 'Select a device',
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color:
+                            Colors.deepOrangeAccent), // Customize border color
+                    borderRadius:
+                        BorderRadius.circular(10), // Customize border radius
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: Colors
+                            .deepOrange), // Customize focused border color
+                    borderRadius: BorderRadius.circular(
+                        10), // Customize focused border radius
+                  ),
+                ),
               ),
             ),
             SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: _addDevice,
-              child: Text('Add Device'),
+            Container(
+              height: 40,
+              width: 200,
+              child: ElevatedButton(
+                onPressed: _addDevice,
+                child: Text('Add Device'),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.orange[700],
+                  elevation:
+                      10, // Adjust the value to control the shadow intensity
+                  shadowColor: Colors
+                      .grey, // You can customize the shadow color if needed
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              height: 40,
+              width: 200,
+              child: ElevatedButton(
+                onPressed: _restartApp,
+                child: Text('Refresh'),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.orange[700],
+                  elevation:
+                      10, // Adjust the value to control the shadow intensity
+                  shadowColor: Colors
+                      .grey, // You can customize the shadow color if needed
+                ),
+              ),
             ),
           ],
         ),
